@@ -36,8 +36,6 @@ class Producer:
         # and use the Host URL for Kafka and Schema Registry!
         self.broker_url = "PLAINTEXT://localhost:9092"
         self.schema_registry_url = "http://localhost:8081"
-        self.schema_registry = CachedSchemaRegistryClient({"url": self.schema_registry_url})
-        #
         self.broker_properties = {"bootstrap.servers": self.broker_url,
                                   "schema.registry.url": self.schema_registry_url}
 
@@ -48,7 +46,6 @@ class Producer:
 
         # TODO: Configure the AvroProducer
         self.producer = AvroProducer(self.broker_properties,
-                                     schema_registry=self.schema_registry,
                                      default_key_schema=self.key_schema,
                                      default_value_schema=self.value_schema)
 
@@ -59,7 +56,7 @@ class Producer:
         # TODO: Write code that creates the topic for this producer if it does not already exist on
         # the Kafka Broker.
         client = AdminClient({"bootstrap.servers": self.broker_url})
-        topic_metadata = client.list_topics(timeout=5)
+        #topic_metadata = client.list_topics(timeout=5)
         _create_topic = client.create_topics([
             NewTopic(
                 topic=self.topic_name,

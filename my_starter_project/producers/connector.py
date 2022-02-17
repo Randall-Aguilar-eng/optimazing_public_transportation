@@ -8,6 +8,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 
+#KAFKA_CONNECT_URL = "http://kafka-connect:8083/connectors"
 KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
 CONNECTOR_NAME = "stations"
 
@@ -39,11 +40,11 @@ def configure_connector():
                 "value.converter.schemas.enable": "false",
                 "batch.max.rows": "500",
                 # TODO
-                "connection.url": "jdbc:postgresql://localhost:5432/cta",
+                "connection.url": "jdbc:postgresql://postgres:5432/cta",
                 # TODO
-                "connection.user": "cta",
+                "connection.user": "cta_admin",
                 # TODO
-                "connection.password": "ctaChicago5tation",
+                "connection.password": "chicago",
                 # TODO
                 "table.whitelist": "stations",
                 # TODO
@@ -51,9 +52,9 @@ def configure_connector():
                 # TODO
                 "incrementing.column.name": "stop_id",
                 # TODO
-                "topic.prefix": "cta.chicago",
+                "topic.prefix": "stations.",
                 # TODO
-                "poll.interval.ms": "5000",
+                "poll.interval.ms": "3600000",
             }
         }),
     )

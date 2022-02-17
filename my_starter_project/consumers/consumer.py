@@ -35,15 +35,14 @@ class KafkaConsumer:
         # TODO: Configure the broker properties below. Make sure to reference the project README
         # and use the Host URL for Kafka and Schema Registry!
         #
-        self.broker_url = "PLAINTEXT://localhost:9092"
-        self.schema_registry_url = "http://localhost:8081"
+        self.broker_url = "PLAINTEXT://kafka0:9092"
+        self.schema_registry_url = "http://schema-registry:8081"
         self.schema_registry = CachedSchemaRegistryClient({"url": self.schema_registry_url})
         self.broker_properties = {
-                #
                 # TODO
+                "group.id":"0",
                 "bootstrap.servers": self.broker_url,
                 "auto.offset.reset": "earliest"
-                #
         }
 
         # TODO: Create the Consumer, using the appropriate type.
@@ -59,7 +58,7 @@ class KafkaConsumer:
         # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
         # how the `on_assign` callback should be invoked.
         #
-        #
+        #a
         self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
