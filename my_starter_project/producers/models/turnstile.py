@@ -27,13 +27,9 @@ class Turnstile(Producer):
             .replace("-", "_")
             .replace("'", "")
         )
-
-        #
-        #
         # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas
-        #
-        #
+
         super().__init__(
             f"org.chicago.cta.turnstile", # TODO: Come up with a better topic name
             key_schema=Turnstile.key_schema,
@@ -54,10 +50,11 @@ class Turnstile(Producer):
             self.producer.produce(
                 topic=self.topic_name,
                 key={"timestamp": self.time_millis()},
+                key_schema=self.key_schema,
                 value={
+                    "station_id": self.station.station_id,
                     "station_name": self.station.name,
                     "line": self.station.color.name
-                    },
-                key_schema=self.key_schema,
-                value_schema=self.value_schema
+                },
+                value_schema=self.value_schema,
         )

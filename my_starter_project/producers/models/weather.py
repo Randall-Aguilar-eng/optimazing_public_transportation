@@ -70,7 +70,7 @@ class Weather(Producer):
         self._set_weather(month)
         # TODO: Complete the function by posting a weather event to REST Proxy. Make sure to
         # specify the Avro schemas and verify that you are using the correct Content-Type header.
-        headers = {"Content-Type": "application/vnd.kafka.json.v2+json"}
+        headers = {"Content-Type": "application/vnd.kafka.avro.v2+json"}
         resp = requests.post(
             # TODO: What URL should be POSTed to?
             f"{Weather.rest_proxy_url}/topics/{self.topic_name}",
