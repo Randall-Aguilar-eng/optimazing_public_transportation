@@ -36,8 +36,10 @@ class Producer:
         # and use the Host URL for Kafka and Schema Registry!
         self.broker_url = "PLAINTEXT://localhost:9092"
         self.schema_registry_url = "http://localhost:8081"
-        self.broker_properties = {"bootstrap.servers": self.broker_url,
-                                  "schema.registry.url": self.schema_registry_url}
+        self.broker_properties = {
+            "bootstrap.servers": self.broker_url,
+            "schema.registry.url": self.schema_registry_url
+        }
 
         # If the topic does not already exist, try to create it
         if self.topic_name not in Producer.existing_topics:
@@ -45,14 +47,14 @@ class Producer:
             Producer.existing_topics.add(self.topic_name)
 
         # TODO: Configure the AvroProducer
-        self.producer = AvroProducer(self.broker_properties,
-                                     default_key_schema=self.key_schema,
-                                     default_value_schema=self.value_schema)
+        self.producer = AvroProducer(
+            config=self.broker_properties,
+            default_key_schema=self.key_schema,
+            default_value_schema=self.value_schema
+        )
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
-        #
-        #
         # TODO: Write code that creates the topic for this producer if it does not already exist on
         # the Kafka Broker.
         client = AdminClient({"bootstrap.servers": self.broker_url})
@@ -86,13 +88,9 @@ class Producer:
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
-        #
-        #
         # TODO: Write cleanup code for the Producer here
-        #
         if self.producer is not None:
             self.producer.flush()
-        #
         logger.info("producer close incomplete - skipping")
 
     def time_millis(self):

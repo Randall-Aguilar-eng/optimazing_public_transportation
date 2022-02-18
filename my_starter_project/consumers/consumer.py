@@ -3,7 +3,7 @@ import logging
 
 import confluent_kafka
 from confluent_kafka import Consumer
-from confluent_kafka.avro import AvroConsumer, CachedSchemaRegistryClient
+from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
 
@@ -36,8 +36,7 @@ class KafkaConsumer:
         # and use the Host URL for Kafka and Schema Registry!
         #
         self.broker_url = "PLAINTEXT://kafka0:9092"
-        self.schema_registry_url = "http://schema-registry:8081"
-        self.schema_registry = CachedSchemaRegistryClient({"url": self.schema_registry_url})
+        self.schema_registry_url = "http://localhost:8081"
         self.broker_properties = {
                 # TODO
                 "group.id":"0",
@@ -70,9 +69,6 @@ class KafkaConsumer:
             if self.offset_earliest is True:
                 partition.offset = confluent_kafka.OFFSET_BEGINNING
             # TODO
-            #
-            #
-
         logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
 
@@ -93,12 +89,13 @@ class KafkaConsumer:
         # is retrieved.
         msg = self.consumer.poll(1.0)
         if msg is 0:
-            print("No message received")
+            logger.debug("No message received from consumer")
             return 0
         elif msg.error() is not None:
-            print(f"Message error {msg.error()}")
+            logger.debug(f"Error message from consumer {msg.error()}")
             return 0
         else:
+            logger.debug(f"consumed message {msg.key()}: {msg.value()}")
             self.message_handler(msg)
             return 1
         

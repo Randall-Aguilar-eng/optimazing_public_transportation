@@ -33,9 +33,9 @@ class TransformedStation(faust.Record):
 #   places it into a new topic with only the necessary information.
 app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
 # TODO: Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
-topic = app.topic("stations.stations", value_type=Station)
+topic = app.topic("org.chicago.cta.jdbc.source.stations", value_type=Station)
 # TODO: Define the output Kafka Topic
-out_topic = app.topic("stations.stations.transformed_stations", partitions=1)
+out_topic = app.topic("transformed_stations", partitions=1)
 # TODO: Define a Faust Table
 table = app.Table(
     "transform_stations",
@@ -61,7 +61,6 @@ async def execute(stations):
             line = "blue"
         elif station.green is True:
             line = "green"
-            
         table[station.station_id] = TransformedStation(
             station_id=station.station_id,
             station_name=station.station_name,

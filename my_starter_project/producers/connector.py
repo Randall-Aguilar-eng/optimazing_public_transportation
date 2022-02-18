@@ -52,7 +52,7 @@ def configure_connector():
                 # TODO
                 "incrementing.column.name": "stop_id",
                 # TODO
-                "topic.prefix": "stations.",
+                "topic.prefix": "org.chicago.cta.jdbc.source.",
                 # TODO
                 "poll.interval.ms": "3600000",
             }
