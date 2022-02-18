@@ -24,7 +24,7 @@ KSQL_URL = "http://localhost:8088"
 
 KSQL_STATEMENT = """
 CREATE TABLE TURNSTILE (
-    station_id INT,
+    station_id VARCHAR,
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
@@ -50,8 +50,7 @@ def execute_statement():
 
     resp = requests.post(
         f"{KSQL_URL}/ksql",
-        headers={"Content-Type": "application/vnd.ksql.v1+json",
-                 "Accept": "application/vnd.ksql.v1+json"},
+        headers={"Content-Type": "application/vnd.ksql.v1+json"},
         data=json.dumps(
             {
                 "ksql": KSQL_STATEMENT,

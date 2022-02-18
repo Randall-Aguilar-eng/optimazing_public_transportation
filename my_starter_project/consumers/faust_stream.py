@@ -43,24 +43,13 @@ table = app.Table(
     partitions=1,
     changelog_topic=out_topic,
 )
-
-
-#
-#
 # TODO: Using Faust, transform input `Station` records into `TransformedStation` records. Note that
 # "line" is the color of the station. So if the `Station` record has the field `red` set to true,
 # then you would set the `line` of the `TransformedStation` record to the string `"red"`
-#
 @app.agent(topic)
 async def execute(stations):
     async for station in stations:
-        line = None
-        if station.red is True:
-            line = "red"
-        elif station.blue is True:
-            line = "blue"
-        elif station.green is True:
-            line = "green"
+        line = "red" if station.red else "blue" if station.blue else "green"
         table[station.station_id] = TransformedStation(
             station_id=station.station_id,
             station_name=station.station_name,

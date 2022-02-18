@@ -19,7 +19,8 @@ class Lines:
 
     def process_message(self, message):
         """Processes a station message"""
-        if "org.chicago.cta.stations" in message.topic():
+        import pdb; pdb.set_trace()
+        if "org.chicago.cta.station" in message.topic():
             value = message.value()
             if message.topic() == "org.chicago.cta.stations.table.v1":
                 value = json.loads(value)

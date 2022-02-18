@@ -41,7 +41,7 @@ class KafkaConsumer:
                 # TODO
                 "group.id":"0",
                 "bootstrap.servers": self.broker_url,
-                "auto.offset.reset": "earliest"
+                "auto.offset.reset": "earliest" if offset_earliest else "latest"
         }
 
         # TODO: Create the Consumer, using the appropriate type.
