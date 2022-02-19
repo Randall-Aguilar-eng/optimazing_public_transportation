@@ -24,7 +24,7 @@ KSQL_URL = "http://localhost:8088"
 
 KSQL_STATEMENT = """
 CREATE TABLE TURNSTILE (
-    station_id VARCHAR,
+    station_id INT,
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
