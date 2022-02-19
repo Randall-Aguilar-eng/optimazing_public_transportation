@@ -52,12 +52,8 @@ class KafkaConsumer:
             self.consumer = Consumer(self.broker_properties)
             pass
 
-        #
-        #
         # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
         # how the `on_assign` callback should be invoked.
-        #
-        #a
         self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
@@ -82,8 +78,6 @@ class KafkaConsumer:
 
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
-        #
-        #
         # TODO: Poll Kafka for messages. Make sure to handle any errors or exceptions.
         # Additionally, make sure you return 1 when a message is processed, and 0 when no message
         # is retrieved.
@@ -98,9 +92,6 @@ class KafkaConsumer:
             logger.debug(f"consumed message {msg.key()}: {msg.value()}")
             self.message_handler(msg)
             return 1
-        
-        
-
 
     def close(self):
         """Cleans up any open kafka consumers"""

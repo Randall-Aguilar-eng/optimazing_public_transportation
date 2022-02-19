@@ -20,7 +20,6 @@ class Station(faust.Record):
     blue: bool
     green: bool
 
-
 # Faust will produce records to Kafka in this format
 class TransformedStation(faust.Record):
     station_id: int
