@@ -75,6 +75,17 @@ def run_server():
             offset_earliest=True,
             is_avro=False,
         ),
+        KafkaConsumer(
+            "org.chicago.cta.station",
+            lines.process_message,
+            offset_earliest=True,
+        ),
+        KafkaConsumer(
+            "TURNSTILE_SUMMARY",
+            lines.process_message,
+            offset_earliest=True,
+            is_avro=False,
+        ),
     ]
 
     try:
@@ -82,9 +93,9 @@ def run_server():
             "Open a web browser to http://localhost:8888 to see the Transit Status Page"
         )
         for consumer in consumers:
-            tornado.ioloop.IOLoop.current().spawn_callback(consumer.consume)
-
-        tornado.ioloop.IOLoop.current().start()
+            t = tornado.ioloop.IOLoop.current()
+            t.spawn_callback(consumer.consume)
+        t.start()
     except KeyboardInterrupt as e:
         logger.info("shutting down server")
         tornado.ioloop.IOLoop.current().stop()

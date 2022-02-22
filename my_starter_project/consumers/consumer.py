@@ -19,12 +19,11 @@ class KafkaConsumer:
         message_handler,
         is_avro=True,
         offset_earliest=False,
-        sleep_secs=1.0,
+        sleep_secs=0.1,
         consume_timeout=0.1,
     ):
         """Creates a consumer object for asynchronous use"""
         self.topic_name_pattern = topic_name_pattern
-        #self.message_handler = self.lines.process_message
         self.message_handler = message_handler
         self.sleep_secs = sleep_secs
         self.consume_timeout = consume_timeout

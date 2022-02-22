@@ -23,6 +23,8 @@ class Lines:
             value = message.value()
             if message.topic() == "org.chicago.cta.stations.table.v1":
                 value = json.loads(value)
+                logger.info("topic %s", message.topic())
+                logger.info("value %s", value)
             if value["line"] == "green":
                 self.green_line.process_message(message)
             elif value["line"] == "red":
@@ -36,4 +38,5 @@ class Lines:
             self.red_line.process_message(message)
             self.blue_line.process_message(message)
         else:
+            value = json.loads(value)
             logger.info("ignoring non-lines message %s", message.topic())
