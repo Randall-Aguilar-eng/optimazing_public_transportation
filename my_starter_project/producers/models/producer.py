@@ -5,7 +5,7 @@ import time
 
 from confluent_kafka import avro
 from confluent_kafka.admin import AdminClient, NewTopic
-from confluent_kafka.avro import AvroProducer, CachedSchemaRegistryClient
+from confluent_kafka.avro import AvroProducer
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class Producer:
     def __init__(
         self,
         topic_name,
-        key_schema,
+        key_schema=None,
         value_schema=None,
         num_partitions=1,
         num_replicas=1

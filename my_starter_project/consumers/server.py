@@ -46,7 +46,9 @@ def run_server():
             "Ensure that the KSQL Command has run successfully before running the web server!"
         )
         exit(1)
-    if topic_check.topic_exists("transformed_stations") is False:
+
+    # Build kafka consumers
+    if topic_check.topic_exists("org.chicago.cta.stations.table.v1") is False:
         logger.fatal(
             "Ensure that Faust Streaming is running successfully before running the web server!"
         )
@@ -58,25 +60,20 @@ def run_server():
     application = tornado.web.Application(
         [(r"/", MainHandler, {"weather": weather_model, "lines": lines})]
     )
-    application.listen(WEB_PORT)
+    application.listen(8888)
 
     # Build kafka consumers
     consumers = [
         KafkaConsumer(
-            "^org.chicago.cta.station.arrivals.",
-            lines.process_message,
-            offset_earliest=True,
-        ),
-        KafkaConsumer(
-            "org.chicago.cta.turnstile",
-            lines.process_message,
-            offset_earliest=True,
-            is_avro=False,
-        ),
-        KafkaConsumer(
             "org.chicago.cta.weather.v1",
             weather_model.process_message,
             offset_earliest=True,
+        ),
+        KafkaConsumer(
+            "org.chicago.cta.stations.table.v1",
+            lines.process_message,
+            offset_earliest=True,
+            is_avro=False,
         ),
     ]
 

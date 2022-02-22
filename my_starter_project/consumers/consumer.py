@@ -7,7 +7,6 @@ from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -25,6 +24,7 @@ class KafkaConsumer:
     ):
         """Creates a consumer object for asynchronous use"""
         self.topic_name_pattern = topic_name_pattern
+        #self.message_handler = self.lines.process_message
         self.message_handler = message_handler
         self.sleep_secs = sleep_secs
         self.consume_timeout = consume_timeout
@@ -35,11 +35,11 @@ class KafkaConsumer:
         # TODO: Configure the broker properties below. Make sure to reference the project README
         # and use the Host URL for Kafka and Schema Registry!
         #
-        self.broker_url = "PLAINTEXT://kafka0:9092"
+        self.broker_url = "PLAINTEXT://localhost:9092"
         self.schema_registry_url = "http://localhost:8081"
         self.broker_properties = {
                 # TODO
-                "group.id":"0",
+                "group.id": "0",
                 "bootstrap.servers": self.broker_url,
                 "auto.offset.reset": "earliest" if offset_earliest else "latest"
         }
@@ -70,28 +70,18 @@ class KafkaConsumer:
 
     async def consume(self):
         """Asynchronously consumes data from kafka topic"""
+        # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
+        # how the `on_assign` callback should be invoked.
         while True:
-            num_results = 1
-            while num_results > 0:
-                num_results = self._consume()
+            message = self.consumer.poll(1.0)
+            if message is None:
+                logger.info("no message received by consumer")
+            elif message.error() is not None:
+                logger.info(f"error from consumer {message.error()}")
+            else:
+                logger.info(f"consumed message {message.key()}: {message.value()}")
+                self.message_handler(message)
             await gen.sleep(self.sleep_secs)
-
-    def _consume(self):
-        """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
-        # TODO: Poll Kafka for messages. Make sure to handle any errors or exceptions.
-        # Additionally, make sure you return 1 when a message is processed, and 0 when no message
-        # is retrieved.
-        msg = self.consumer.poll(1.0)
-        if msg is 0:
-            logger.debug("No message received from consumer")
-            return 0
-        elif msg.error() is not None:
-            logger.debug(f"Error message from consumer {msg.error()}")
-            return 0
-        else:
-            logger.debug(f"consumed message {msg.key()}: {msg.value()}")
-            self.message_handler(msg)
-            return 1
 
     def close(self):
         """Cleans up any open kafka consumers"""

@@ -29,9 +29,9 @@ class Turnstile(Producer):
         )
         # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas
-
+        topic_name = "org.chicago.cta.turnstile"
         super().__init__(
-            f"org.chicago.cta.turnstile", # TODO: Come up with a better topic name
+            topic_name, # TODO: Come up with a better topic name
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema, #TODO: Uncomment once schema is defined
             num_partitions=1,

@@ -19,9 +19,9 @@ class Lines:
 
     def process_message(self, message):
         """Processes a station message"""
-        if "org.chicago.cta.station" in message.topic():
+        if "org.chicago.cta.stations" in message.topic():
             value = message.value()
-            if message.topic() == f"org.chicago.cta.station.table.v1":
+            if message.topic() == "org.chicago.cta.stations.table.v1":
                 value = json.loads(value)
             if value["line"] == "green":
                 self.green_line.process_message(message)
@@ -30,7 +30,7 @@ class Lines:
             elif value["line"] == "blue":
                 self.blue_line.process_message(message)
             else:
-                logger.debug("discarding unknown line msg %s", value["line"])
+                logger.debug("discarding unknown line ms›g %s", value["line"])
         elif "TURNSTILE_SUMMARY" == message.topic():
             self.green_line.process_message(message)
             self.red_line.process_message(message)
